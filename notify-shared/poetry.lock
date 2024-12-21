@@ -12,22 +12,6 @@ files = [
 ]
 
 [[package]]
-name = "notify-shared"
-version = "0.1.0"
-description = ""
-optional = false
-python-versions = "3.12.*"
-files = []
-develop = false
-
-[package.dependencies]
-pydantic = "2.10.4"
-
-[package.source]
-type = "directory"
-url = "../notify-shared"
-
-[[package]]
 name = "pydantic"
 version = "2.10.4"
 description = "Data validation using Python type hints"
@@ -173,4 +157,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "3.12.*"
-content-hash = "fdfdcd51e13eb37a3d97d38abbcf2de0f4092b1cc7ad0851fa1e6882aea99da0"
+content-hash = "ad7a9d7a5aa35132698553a951da109d5df5831c523f55d8c92fd77bbe6fa1ff"

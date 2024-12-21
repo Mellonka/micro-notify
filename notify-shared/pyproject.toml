@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "notify-email"
+name = "notify-shared"
 version = "0.1.0"
 description = ""
 authors = []
@@ -9,7 +9,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.12.*"
 pydantic = "2.10.4"
-notify_shared = { path = "../notify-shared/" }
 
 
 [build-system]
