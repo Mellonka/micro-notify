@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "notify-shared"
-version = "0.1.0"
+version = "0.1.12"
 description = ""
 authors = []
 readme = "README.md"
@@ -8,8 +8,16 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "3.12.*"
-pydantic = "2.10.4"
+pydantic = {extras = ["email"], version = "2.10.*"}
 
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.4"
+mypy = "^1.14.0"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
 
 [build-system]
 requires = ["poetry-core"]

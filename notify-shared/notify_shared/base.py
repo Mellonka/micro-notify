@@ -11,3 +11,8 @@ class BaseEntity(BaseModel):
 
 class Entity[TKey](BaseEntity):
     id: TKey
+
+
+class HandleBase[TRequest, TResult](BaseModel):
+    async def handle(self, request: TRequest) -> TResult:
+        raise NotImplementedError
