@@ -1,19 +1,21 @@
+from functools import cached_property
 import datetime as dt
 from uuid import uuid4
 
-from notify_email.application.services.smtp_email import (
+from notify_email.application.services.email import (
     SendFailedError,
-    SmtpEmailServiceABC,
+    EmailServiceABC,
 )
-from notify_email.domain.mail.models import Mail, MailStatus
-from notify_email.domain.mail.interfaces.repository import (
-    MailReadRepositoryABC,
-    MailWriteRepositoryABC,
+from notify_email.domain.email.models import Email, EmailStatus
+from notify_email.domain.email.interfaces.repository import (
+    EmailReadRepositoryABC,
+    EmailWriteRepositoryABC,
 )
 
 from notify_shared import Command, CommandHandler, UnitOfWorkABC
+from notify_shared.utils import now
 
-from pydantic import EmailStr
+from pydantic import EmailStr, Field
 
 
 class AlreadySentError(Exception):
@@ -22,49 +24,50 @@ class AlreadySentError(Exception):
 
 class SendEmailCommand(Command):
     external_id: str
+    created_at: dt.datetime = Field(default_factory=now)
 
-    subject: str | None
-    text: str
     sender: str
-    receiver: list[EmailStr]
+    subject: str | None
+    content: str
+    receivers: list[EmailStr]
 
 
 class SendEmailHandler(CommandHandler[SendEmailCommand, None]):
+    email_service: EmailServiceABC
     unit_of_work: UnitOfWorkABC
-    mail_read_repo: MailReadRepositoryABC
-    mail_write_repo: MailWriteRepositoryABC
-    smtp_email_service: SmtpEmailServiceABC
+
+    @cached_property
+    def email_read_repo(self) -> EmailReadRepositoryABC:
+        return self.unit_of_work.get_repository(EmailReadRepositoryABC)
+
+    @cached_property
+    def email_write_repo(self) -> EmailWriteRepositoryABC:
+        return self.unit_of_work.get_repository(EmailWriteRepositoryABC)
 
     async def handle(self, request: SendEmailCommand) -> None:
-        if not self.mail_read_repo.exist_by_conflict(
-            request.sender, request.external_id
-        ):
-            mail = Mail(
+        email = await self.email_read_repo.load_by_conflict(request.external_id)
+
+        if not email:
+            email = Email(
                 id=uuid4(),
                 external_id=request.external_id,
-                created_at=dt.datetime.now(),
-                subject=request.subject,
-                text=request.text,
+                created_at=request.created_at,
+                status=EmailStatus.sending,
                 sender=request.sender,
-                receiver=request.receiver,
-                status=MailStatus.sending,
+                subject=request.subject,
+                content=request.content,
+                receivers=request.receivers,
             )
-
-            self.mail_write_repo.add(mail)
+            self.email_write_repo.add(email)
             await self.unit_of_work.commit()
-        else:
-            mail = await self.mail_read_repo.load_by_conflict(
-                request.sender, request.external_id
-            )
-            if mail.status == MailStatus.sended:
-                raise AlreadySentError
+        elif email.status == EmailStatus.sent:
+            raise AlreadySentError
 
         try:
-            await self.smtp_email_service.send(mail)
+            await self.email_service.send(email)
         except SendFailedError:
-            mail.status = MailStatus.retrying
+            email.status = EmailStatus.retrying
         else:
-            mail.status = MailStatus.sended
+            email.status = EmailStatus.sent
 
-        mail.last_send_at = dt.datetime.now()
         await self.unit_of_work.commit()

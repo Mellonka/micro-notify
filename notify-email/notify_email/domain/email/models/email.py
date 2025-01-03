@@ -6,19 +6,19 @@ from notify_shared import AggregateRoot, Entity
 from pydantic import EmailStr
 
 
-class MailStatus(StrEnum):
+class EmailStatus(StrEnum):
     sending = auto()
+    sent = auto()
     retrying = auto()
-    sended = auto()
 
 
-class Mail(AggregateRoot, Entity[UUID]):
-    external_id: str
-    status: MailStatus
+class Email(AggregateRoot, Entity[UUID]):
+    status: EmailStatus
     created_at: dt.datetime
-    last_send_at: dt.datetime | None = None
 
-    subject: str | None
-    text: str
+    external_id: str
+
     sender: str
-    receiver: list[EmailStr]
+    subject: str | None
+    content: str
+    receivers: list[EmailStr]
