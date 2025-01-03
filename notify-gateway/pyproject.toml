@@ -8,6 +8,10 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.12.*"
 pydantic = "2.10.4"
+notify_shared = { path = "../notify-shared/" }
+phonenumbers = "^8.13.52"
+sqlalchemy = "^2.0.36"
+alembic = "^1.14.0"
 
 
 [build-system]
