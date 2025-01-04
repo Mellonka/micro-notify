@@ -1,7 +1,7 @@
-from domain.message import Message
-from models.message import MessageDB
-from domain.message_status import MessageStatus
-from models.message_status import MessageStatusDB
+from src.domains.message.domain.message import Message
+from src.domains.message.infra.sqlalchemy.models.message import MessageDB
+from src.domains.message.domain.message_status import MessageStatus
+from src.domains.message.infra.sqlalchemy.models.message_status import MessageStatusDB
 
 
 def MessageToDB(msg: Message) -> MessageDB:

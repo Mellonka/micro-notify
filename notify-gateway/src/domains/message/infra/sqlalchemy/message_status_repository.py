@@ -3,10 +3,10 @@ from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 
-from domain.message_status import MessageStatus
-from domain.message_status_repository import MessageStatusRepository
-from mappers import MessageStatusToDB, MessageStatusDBToDomain
-from models.message_status import MessageStatusDB
+from src.domains.message.domain.message_status import MessageStatus
+from src.domains.message.domain.message_status_repository import MessageStatusRepository
+from src.domains.message.infra.sqlalchemy.mappers import MessageStatusToDB, MessageStatusDBToDomain
+from src.domains.message.infra.sqlalchemy.models.message_status import MessageStatusDB
 
 
 class SQLAlchemyMessageStatusRepository(MessageStatusRepository):

@@ -2,7 +2,7 @@ from enum import StrEnum
 from uuid import UUID
 from datetime import datetime
 
-from notify_shared.base import AggregateRoot, Entity
+from src.domains.message.domain.base import AggregateRoot, Entity
 
 
 class Status(StrEnum):

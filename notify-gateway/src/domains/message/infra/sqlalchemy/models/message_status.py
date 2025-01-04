@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import UUID, Column, String, DateTime
 
-from metadata import Base
+from src.domains.message.infra.sqlalchemy.metadata import Base
 
 class MessageStatusDB(Base):
     __tablename__="message_statues"

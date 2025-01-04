@@ -1,9 +1,9 @@
 from uuid import UUID
-from domain.message import Message
-from domain.message_unit_of_work import MessageUnitOfWork
+from src.domains.message.domain.message import Message
+from src.domains.message.domain.message_unit_of_work import CreateMessageUnitOfWork
 
 class CreateMessageService:
-    def __init__(self, msg_uow: MessageUnitOfWork):
+    def __init__(self, msg_uow: CreateMessageUnitOfWork):
         self.msg_uow = msg_uow
 
     async def create_msg(self, msg: Message) -> UUID:
@@ -12,5 +12,6 @@ class CreateMessageService:
             if result is not None:
                 return result.id
             await uow.message_repo.add(msg)
+            await uow.add_mesg_to_commit(msg)
             await uow.commit()
             return msg.id

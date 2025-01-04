@@ -1,6 +1,6 @@
 from uuid import UUID
-from domain.message_status import MessageStatus
-from domain.message_status_unit_of_work import MessageStatusUnitOfWork
+from src.domains.message.domain.message_status import MessageStatus
+from src.domains.message.domain.message_status_unit_of_work import MessageStatusUnitOfWork
 
 class CreateMessageService:
     def __init__(self, status_uow: MessageStatusUnitOfWork):

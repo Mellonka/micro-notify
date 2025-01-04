@@ -8,11 +8,16 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.12.*"
 pydantic = "2.10.4"
-notify_shared = { path = "../notify-shared/" }
 phonenumbers = "^8.13.52"
 sqlalchemy = "^2.0.36"
 alembic = "^1.14.0"
+aio-pika = "^9.5.4"
+fastapi = {extras = ["all"], version = "^0.115.6"}
+asyncpg = "^0.30.0"
+greenlet = "^3.1.1"
 
+[tool.poetry.extras]
+shared = ["notify_shared"]
 
 [build-system]
 requires = ["poetry-core"]

@@ -3,10 +3,10 @@ from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 
-from domain.message import Message
-from domain.message_repository import MessageRepository
-from mappers import MessageToDB, MessageDBToDomain
-from models.message import MessageDB
+from src.domains.message.domain.message import Message
+from src.domains.message.domain.message_repository import MessageRepository
+from src.domains.message.infra.sqlalchemy.mappers import MessageToDB, MessageDBToDomain
+from src.domains.message.infra.sqlalchemy.models.message import MessageDB
 
 
 class SQLAlchemyMessageRepository(MessageRepository):
@@ -36,7 +36,7 @@ class SQLAlchemyMessageRepository(MessageRepository):
         result = (
             await self._session.execute(
                 select(MessageDB).filter_by(external_id=id)
-        )).scalar_one_or_none
+        )).scalar_one_or_none()
         if result is None:
             return None
         return MessageDBToDomain(result)

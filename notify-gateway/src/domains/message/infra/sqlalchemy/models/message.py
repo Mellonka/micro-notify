@@ -1,8 +1,8 @@
 from uuid import UUID, uuid4
-from sqlalchemy import UUID, Column, Boolean, String, JSON
+from sqlalchemy import JSON
 from sqlalchemy.orm import Mapped, mapped_column
 
-from metadata import Base
+from src.domains.message.infra.sqlalchemy.metadata import Base
 
 class MessageDB(Base):
     __tablename__ = "messages"
@@ -14,4 +14,4 @@ class MessageDB(Base):
     sender: Mapped[str] = mapped_column(nullable=False)
     pending: Mapped[bool] = mapped_column(nullable=False, default=False)
     text: Mapped[str] = mapped_column()
-    meta: Mapped[dict] = mapped_column()
+    meta: Mapped[dict] = mapped_column(JSON)

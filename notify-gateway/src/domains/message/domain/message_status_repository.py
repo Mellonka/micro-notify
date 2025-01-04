@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from domain.message_status import MessageStatus
+from src.domains.message.domain.message_status import MessageStatus
 
 
 class MessageStatusRepository(ABC):

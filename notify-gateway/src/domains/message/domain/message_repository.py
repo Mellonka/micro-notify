@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from domain.message import Message
+from src.domains.message.domain.message import Message
 
 
 class MessageRepository(ABC):

@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import model_validator, validate_email
 import phonenumbers
 
-from notify_shared.base import AggregateRoot, Entity
+from src.domains.message.domain.base import AggregateRoot, Entity
 
 
 class MessageType(StrEnum):
@@ -21,7 +21,7 @@ class Message(AggregateRoot, Entity[UUID]):
     sender: str
     text: str
     pending: bool
-    meta: str
+    meta: dict
 
     @model_validator(mode='after')
     def validate_reciver(self) -> Self:
