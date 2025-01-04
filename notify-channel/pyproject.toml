@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "notify-channel"
+version = "0.1.0"
+description = ""
+authors = []
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+notify_shared = { path = "../notify-shared/" }
+aio-pika = "9.5.4"
+dependency-injector = "^4.44.0"
+aiosmtplib = "^3.0.2"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.36"}
+litestar = "^2.13.0"
+python-dotenv = "^1.0.1"
+asyncpg = "^0.30.0"
+alembic = {extras = ["async"], version = "^1.14.0"}
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.4"
+mypy = "^1.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
