@@ -13,7 +13,7 @@ def MessageToDB(msg: Message) -> MessageDB:
         sender=msg.sender,
         pending=msg.pending,
         text=msg.text,
-        meta=msg.meta
+        meta=msg.meta,
     )
 
 
@@ -26,21 +26,17 @@ def MessageDBToDomain(msg: MessageDB) -> Message:
         sender=msg.sender,
         pending=msg.pending,
         text=msg.text,
-        meta=msg.meta
+        meta=msg.meta,
     )
 
 
 def MessageStatusToDB(status: MessageStatus) -> MessageStatusDB:
     return MessageStatusDB(
-        id=status.id,
-        status=status.status,
-        updated_at=status.updated_at
+        id=status.id, status=status.status, updated_at=status.updated_at
     )
 
 
 def MessageStatusDBToDomain(status: MessageStatusDB) -> MessageStatus:
     return MessageStatus(
-        id=status.id,
-        status=status.status,
-        updated_at=status.updated_at
+        id=status.id, status=status.status, updated_at=status.updated_at
     )

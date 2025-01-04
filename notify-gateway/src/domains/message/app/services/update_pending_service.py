@@ -1,4 +1,7 @@
-from src.domains.message.domain.update_pending_unit_of_work import UpdatePendingUnitOfWork
+from src.domains.message.domain.update_pending_unit_of_work import (
+    UpdatePendingUnitOfWork,
+)
+
 
 class UpdatePendingService:
     def __init__(self, update_uow: UpdatePendingUnitOfWork):

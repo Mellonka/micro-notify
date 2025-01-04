@@ -5,6 +5,7 @@ from src.domains.message.domain.unit_of_work import UnitOfWork
 from src.domains.message.domain.message_repository import MessageRepository
 from src.domains.message.domain.message_status_repository import MessageStatusRepository
 
+
 class CreateMessageUnitOfWork(UnitOfWork, ABC):
     message_repo: MessageRepository
     status_repo: MessageStatusRepository

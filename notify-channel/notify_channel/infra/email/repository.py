@@ -89,7 +89,9 @@ class SQLAlchemyEmailEvent(SQLAlchemyBase):
     )
 
 
-type SQLAlchemyRepository = SQLAlchemyEmailReadRepository | SQLAlchemyEmailWriteRepository
+type SQLAlchemyRepository = (
+    SQLAlchemyEmailReadRepository | SQLAlchemyEmailWriteRepository
+)
 
 
 @dataclass

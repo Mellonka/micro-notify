@@ -1,4 +1,3 @@
-import asyncio
 from dataclasses import dataclass
 from functools import cached_property
 import datetime as dt
@@ -74,7 +73,11 @@ class SendEmailHandler(CommandHandler[SendEmailCommand, None]):
 
             await self.email_write_repo.insert_domain_event(
                 EmailParsingFailedEvent(
-                    event_data={"raw_message": data, "exc_info": str(exc)}
+                    event_data={
+                        "raw_message": data,
+                        "exc_info": str(exc),
+                        "status": "failed",
+                    }
                 )
             )
             await self.unit_of_work.commit()
@@ -106,10 +109,16 @@ class SendEmailHandler(CommandHandler[SendEmailCommand, None]):
             await self.email_service.send(email)
         except SendFailedError:
             email.status = EmailStatus.retrying
-            event = EmailSendingFailedEvent(email_id=email.id)
+            event = EmailSendingFailedEvent(
+                email_id=email.id,
+                event_data={"status": email.status, "external_id": email.external_id},
+            )
         else:
             email.status = EmailStatus.sent
-            event = EmailSendingSuccessEvent(email_id=email.id)
+            event = EmailSendingSuccessEvent(
+                email_id=email.id,
+                event_data={"status": email.status, "external_id": email.external_id},
+            )
             logger.info("Отправили email с external_id = %s", email.external_id)
 
         await self.email_service.publish_event(event)

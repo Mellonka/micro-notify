@@ -1,7 +1,10 @@
 import asyncio
 from src.domains.message.app.services.update_pending_service import UpdatePendingService
-from src.domains.message.infra.units_of_work.update_pending_unit_of_work import SQLAlchemyUpdatePendingUOW
+from src.domains.message.infra.units_of_work.update_pending_unit_of_work import (
+    SQLAlchemyUpdatePendingUOW,
+)
 from src.domains.message.infra.aio_pika.publisher import RabbitMQPublisher
+
 
 async def main():
     rabbitmq = RabbitMQPublisher()

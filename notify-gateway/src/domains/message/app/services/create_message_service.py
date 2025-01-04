@@ -2,6 +2,7 @@ from uuid import UUID
 from src.domains.message.domain.message import Message
 from src.domains.message.domain.message_unit_of_work import CreateMessageUnitOfWork
 
+
 class CreateMessageService:
     def __init__(self, msg_uow: CreateMessageUnitOfWork):
         self.msg_uow = msg_uow

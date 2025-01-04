@@ -2,7 +2,6 @@ import aiosmtplib
 from dependency_injector import containers, providers
 
 
-
 async def _smtp(*args, **kwargs):
     async with aiosmtplib.SMTP(*args, **kwargs) as smtp:
         yield smtp

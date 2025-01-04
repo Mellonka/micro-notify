@@ -7,18 +7,21 @@ services:
       - .env
     build:
       dockerfile: Dockerfile
+      context: ./
     ports:
       - 10000:10000
     networks:
-      - micro-network
+      - micro-notify-network
   outbox:
     container_name: notify-gateway-outbox
     env_file:
       - .env
     build:
       dockerfile: outbox.Dockerfile
+      context: ./
     networks:
-      - micro-network
+      - micro-notify-network
+
 networks:
-  micro-network:
+  micro-notify-network:
     external: true

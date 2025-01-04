@@ -1,6 +1,8 @@
 from uuid import UUID
-from src.domains.message.domain.message_status import MessageStatus
-from src.domains.message.domain.message_status_unit_of_work import MessageStatusUnitOfWork
+from src.domains.message.domain.message_status_unit_of_work import (
+    MessageStatusUnitOfWork,
+)
+
 
 class GetMessageStatusService:
     def __init__(self, status_uow: MessageStatusUnitOfWork):

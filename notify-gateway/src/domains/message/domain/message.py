@@ -23,7 +23,7 @@ class Message(AggregateRoot, Entity[UUID]):
     pending: bool
     meta: dict
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def validate_reciver(self) -> Self:
         if self.type == MessageType.email:
             validate_email(self.reciver)
@@ -32,4 +32,3 @@ class Message(AggregateRoot, Entity[UUID]):
             if not phonenumbers.is_valid_number(parsed_number):
                 raise ValueError
         return self
-

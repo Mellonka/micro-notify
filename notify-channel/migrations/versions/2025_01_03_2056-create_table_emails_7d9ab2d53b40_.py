@@ -1,7 +1,7 @@
 """create table emails
 
 Revision ID: 7d9ab2d53b40
-Revises: 
+Revises:
 Create Date: 2025-01-03 20:56:35.355761
 
 """

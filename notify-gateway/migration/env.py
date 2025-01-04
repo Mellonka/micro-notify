@@ -9,8 +9,6 @@ from alembic import context
 
 from src.config import POSTGRES_URL
 from src.domains.message.infra.sqlalchemy.metadata import Base
-from src.domains.message.infra.sqlalchemy.models.message import MessageDB
-from src.domains.message.infra.sqlalchemy.models.message_status import MessageStatusDB
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

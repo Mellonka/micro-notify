@@ -4,6 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from src.domains.message.infra.sqlalchemy.metadata import Base
 
+
 class MessageDB(Base):
     __tablename__ = "messages"
 

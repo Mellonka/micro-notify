@@ -53,7 +53,11 @@ class SQLAlchemyContainer(containers.DeclarativeContainer):
 
     config = providers.Configuration()
     db_async_url = providers.Singleton(
-        lambda user, password, host, port, db_name: f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db_name}",
+        lambda user,
+        password,
+        host,
+        port,
+        db_name: f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db_name}",
         user=config.pg.user,
         password=config.pg.password,
         host=config.pg.host,

@@ -3,7 +3,7 @@ import logging
 from dataclasses import dataclass
 from typing import AsyncIterable
 
-from notify_shared import CommandHandler, UnitOfWorkABC
+from notify_shared import CommandHandler
 from pydantic import ValidationError
 from aio_pika.abc import (
     AbstractRobustQueue,
