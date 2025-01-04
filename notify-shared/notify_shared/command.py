@@ -8,4 +8,6 @@ class Command(BaseModel):
 
 
 class CommandHandler[TCommand: Command, TResult](HandleBase[TCommand, TResult]):
-    pass
+    @classmethod
+    def parse_command(cls, data: bytes | str) -> TCommand:
+        raise NotImplementedError
