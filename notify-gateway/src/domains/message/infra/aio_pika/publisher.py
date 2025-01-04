@@ -1,8 +1,12 @@
+import logging
+
 import aio_pika
 
 from src.domains.message.domain.message import Message
 from src.config import RABBITMQ_URL, queues
 from src.domains.message.infra.aio_pika.mappers import mappers
+
+logger = logging.getLogger(__name__)
 
 
 class RabbitMQPublisher:
@@ -20,3 +24,5 @@ class RabbitMQPublisher:
             ),
             routing_key=queues[msg.type],
         )
+
+        logger.info("Отправили задания на отправку %s", body)

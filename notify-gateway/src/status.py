@@ -1,6 +1,10 @@
 import asyncio
 from src.domains.message.infra.aio_pika.consumer import RabbitMQConsumer
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 
 async def main():
     rabbitmq = RabbitMQConsumer()

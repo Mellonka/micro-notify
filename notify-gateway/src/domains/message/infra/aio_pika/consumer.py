@@ -1,13 +1,16 @@
+import logging
+import json
+
 import aio_pika
 from aio_pika.abc import AbstractIncomingMessage
-
-import json
 
 from src.domains.message.domain.message_status import MessageStatus
 from src.config import RABBITMQ_URL, EMAIL_STATUS_QUEUE
 from src.domains.message.infra.units_of_work.message_status_unit_of_work import (
     SQLAlchemyGetMessageStatusUOW,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class RabbitMQConsumer:
@@ -28,8 +31,10 @@ class RabbitMQConsumer:
                 status=data["event_data"]["status"],
             )
         )
-        print("Отправили сообщение")
+        await unit_of_work.commit()
         await message.ack()
+
+        logger.info("Обработали сообщение: %s", message.body.decode())
 
     async def run(self):
         queue = await self.channel.declare_queue(name=EMAIL_STATUS_QUEUE, durable=True)

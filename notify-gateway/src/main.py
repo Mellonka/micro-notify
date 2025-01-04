@@ -16,6 +16,10 @@ from src.domains.message.infra.aio_pika.publisher import RabbitMQPublisher
 from src.views.create.route import create_router
 from src.views.status.route import status_router
 
+import logging
+
+logging.basicConfig(level=10)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

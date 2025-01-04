@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  gateway:
+    container_name: gateway-api
+    env_file:
+      - notify-gateway/.env
+    environment:
+      - POSTGRES_HOST=gateway_postgres
+      - POSTGRES_PORT=5432
+    build:
+      context: ./notify-gateway/
+      dockerfile: ./api.Dockerfile
+    ports:
+      - 10000:10000
+    networks:
+      - micro-notify-network
+    depends_on:
+      - gateway_postgres
+      - rabbitmq
+
+  outbox:
+    container_name: gateway-outbox
+    env_file:
+      - ./notify-gateway/.env
+    environment:
+      - POSTGRES_HOST=gateway_postgres
+      - POSTGRES_PORT=5432
+    build:
+      context: ./notify-gateway/
+      dockerfile: ./outbox.Dockerfile
+    networks:
+      - micro-notify-network
+    depends_on:
+      - gateway_postgres
+      - rabbitmq
+
+  status:
+    container_name: gateway-status
+    env_file:
+      - ./notify-gateway/.env
+    environment:
+      - POSTGRES_HOST=gateway_postgres
+      - POSTGRES_PORT=5432
+    build:
+      context: ./notify-gateway/
+      dockerfile: ./status.Dockerfile
+    networks:
+      - micro-notify-network
+    depends_on:
+      - gateway_postgres
+      - rabbitmq
+
+  email:
+    container_name: notify-email
+    env_file:
+      - ./notify-channel/.env
+    build:
+      context: ./notify-channel/
+      dockerfile: ./email.Dockerfile
+    networks:
+      - micro-notify-network
+    depends_on:
+      - channel_postgres
+      - rabbitmq
+
+  channel_postgres:
+    image: postgres:17.2-alpine
+    env_file:
+      - ./notify-channel/.env
+    volumes:
+      - notify-channel-postgres-data:/var/lib/postgresql/data
+    networks:
+      - micro-notify-network
+    restart: always
+
+  gateway_postgres:
+    image: postgres:17.2-alpine
+    env_file:
+      - ./notify-gateway/.env
+    volumes:
+      - notify-gateway-postgres-data:/var/lib/postgresql/data
+    networks:
+      - micro-notify-network
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:4.0.5-management-alpine
+    container_name: micro-rabbitmq
+    ports:
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: micro
+      RABBITMQ_DEFAULT_PASS: micro
+    volumes:
+      - notify-email-rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - micro-notify-network
+    restart: always
+
+
+networks:
+  micro-notify-network:
+
+volumes:
+  notify-channel-postgres-data:
+  notify-gateway-postgres-data:
+  notify-email-rabbitmq-data:

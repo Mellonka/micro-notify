@@ -5,6 +5,10 @@ from src.domains.message.infra.units_of_work.update_pending_unit_of_work import 
 )
 from src.domains.message.infra.aio_pika.publisher import RabbitMQPublisher
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 
 async def main():
     rabbitmq = RabbitMQPublisher()

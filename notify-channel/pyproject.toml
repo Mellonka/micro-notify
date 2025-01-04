@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "3.12.*"
-notify_shared = { path = "../notify-shared/" }
+notify_shared = { path = "./notify-shared/" }
 aio-pika = "9.5.4"
 dependency-injector = "^4.44.0"
 aiosmtplib = "^3.0.2"

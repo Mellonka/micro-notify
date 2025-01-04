@@ -94,7 +94,7 @@ class SQLAlchemyContainer(containers.DeclarativeContainer):
         config.pg.password.from_env("POSTGRES_PASSWORD", required=True)
         config.pg.host.from_env("POSTGRES_HOST", required=True)
         config.pg.port.from_env("POSTGRES_PORT", required=True, as_=int)
-        config.pg.db_name.from_env("POSTGRES_DBNAME", required=True)
+        config.pg.db_name.from_env("POSTGRES_DB", required=True)
 
         config.sql_debug.from_env("SQL_DEBUG", default=True, as_=bool)
 

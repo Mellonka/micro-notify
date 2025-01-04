@@ -35,3 +35,5 @@ class EmailService(EmailServiceABC):
 
     async def publish_event(self, event: EmailBaseEvent) -> None:
         await self.event_producer.publish(event)
+
+        logger.info('Отправили ивент: %s', event.model_dump_json())
