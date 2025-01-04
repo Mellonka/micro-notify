@@ -1,5 +1,10 @@
 from .email import Email, EmailStatus
-from .events import EmailBaseEvent, EmailSendingFailedEvent, EmailSendingSuccessEvent
+from .events import (
+    EmailBaseEvent,
+    EmailSendingFailedEvent,
+    EmailSendingSuccessEvent,
+    EmailParsingFailedEvent,
+)
 
 
 __all__ = [
@@ -8,4 +13,5 @@ __all__ = [
     "EmailBaseEvent",
     "EmailSendingFailedEvent",
     "EmailSendingSuccessEvent",
+    "EmailParsingFailedEvent",
 ]

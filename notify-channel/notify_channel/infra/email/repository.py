@@ -6,7 +6,16 @@ from uuid import UUID
 
 from notify_channel.domain.email.models.events import EmailBaseEvent
 from notify_channel.infra.shared.sqlalchemy import SQLAlchemyBase
-from sqlalchemy import ForeignKey, select, exists, update, DateTime, String, Index
+from sqlalchemy import (
+    ForeignKey,
+    insert,
+    select,
+    exists,
+    update,
+    DateTime,
+    String,
+    Index,
+)
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
@@ -62,12 +71,22 @@ class SQLAlchemyEmailEvent(SQLAlchemyBase):
     __tablename__ = "email_events"
 
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-    email_id: Mapped[UUID] = mapped_column(ForeignKey("emails.id"))
+    email_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("emails.id"), nullable=True
+    )
     timestamp: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
-    event: Mapped[str]
-    data: Mapped[dict | None] = mapped_column(postgresql.JSONB())
+    event: Mapped[str] = mapped_column()
+    event_data: Mapped[dict | None] = mapped_column(postgresql.JSONB())
 
-    __table_args__ = (Index("email_events_by_email_idx", email_id, id),)
+    __table_args__ = (
+        Index(
+            "email_events_by_email_idx",
+            email_id,
+            id,
+            postgresql_where=email_id.is_not(None),
+        ),
+        Index("email_events_by_event_idx", event, timestamp, id),
+    )
 
 
 type SQLAlchemyRepository = SQLAlchemyEmailReadRepository | SQLAlchemyEmailWriteRepository
@@ -112,10 +131,11 @@ class SQLAlchemyEmailWriteRepository(EmailWriteRepositoryABC):
         )
 
     async def insert_domain_event(self, event: EmailBaseEvent) -> None:
-        self.db_session.add(
-            SQLAlchemyEmailEvent(
+        await self.db_session.execute(
+            insert(SQLAlchemyEmailEvent).values(
                 email_id=event.email_id,
                 timestamp=event.timestamp,
                 event=event.event,
+                event_data=event.event_data,
             )
         )
