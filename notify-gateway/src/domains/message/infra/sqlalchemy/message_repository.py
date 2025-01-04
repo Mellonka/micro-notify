@@ -31,7 +31,6 @@ class SQLAlchemyMessageRepository(MessageRepository):
             return None
         return MessageDBToDomain(result)
         
-    
     async def get_by_external_id(self, id) -> Optional[Message]:
         result = (
             await self._session.execute(
@@ -40,3 +39,10 @@ class SQLAlchemyMessageRepository(MessageRepository):
         if result is None:
             return None
         return MessageDBToDomain(result)
+    
+    async def get_not_pending(self, limit: int) -> list[Message]:
+        result = (await self._session.execute(
+            select(MessageDB).filter_by(pending=False).limit(limit)
+        )).scalars()
+
+        return [MessageDBToDomain(msg) for msg in result]

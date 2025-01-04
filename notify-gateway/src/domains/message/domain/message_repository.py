@@ -20,3 +20,7 @@ class MessageRepository(ABC):
     @abstractmethod
     async def get_by_external_id(self, id) -> Optional[Message]:
         raise NotImplementedError
+    
+    @abstractmethod
+    async def get_not_pending(self, limit: int) -> list[Message]:
+        raise NotImplementedError

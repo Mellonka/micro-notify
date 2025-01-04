@@ -26,7 +26,7 @@ class SQLAlchemyMessageStatusRepository(MessageStatusRepository):
         result = (
             await self._session.execute(
                 select(MessageStatusDB).filter_by(id=id)
-        )).scalar_one_or_none
+        )).scalar_one_or_none()
         if result is None:
             return None
         return MessageStatusDBToDomain(result)

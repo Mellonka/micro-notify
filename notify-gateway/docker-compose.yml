@@ -11,6 +11,14 @@ services:
       - 10000:10000
     networks:
       - micro-network
+  outbox:
+    container_name: notify-gateway-outbox
+    env_file:
+      - .env
+    build:
+      dockerfile: outbox.Dockerfile
+    networks:
+      - micro-network
 networks:
   micro-network:
     external: true
