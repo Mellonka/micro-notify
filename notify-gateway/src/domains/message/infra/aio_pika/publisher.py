@@ -12,7 +12,8 @@ class RabbitMQPublisher:
 
     async def publish(self, msg: Message):
         body = mappers[msg.type](msg)
+        await self.channel.declare_queue(queues[msg.type], durable=True)
         await self.channel.default_exchange.publish(
-            aio_pika.Message(body=body.encode()),
+            aio_pika.Message(body=body.encode(), delivery_mode=aio_pika.DeliveryMode.PERSISTENT,),
             routing_key=queues[msg.type],
         )

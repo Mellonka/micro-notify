@@ -32,6 +32,9 @@ class SQLAlchemyMQCreateMessageUOW(CreateMessageUnitOfWork):
         if self.msg is None:
             return
         await self.msg_broker.publish(self.msg)
+        self.msg.pending = True
+        await self.message_repo.update(self.msg)
+        await self.session.commit()
     
     async def add_mesg_to_commit(self, msg: Message):
         self.msg = msg
