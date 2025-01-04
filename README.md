@@ -2,5 +2,10 @@
 
 ## Локальный запуск Docker
 
+Перед запуском нужно в папке notify-channel дозаполнить файл `.env`. Нужно проставить поля `SMTP_USER` и `SMTP_PASSWORD`
+
 Для локального запуска выполните команду `docker-compose up --build -d`
-АПИ откроется на http://localhost:10000
+
+АПИ откроется по адресу `http://localhost:10000/docs`
+
+
