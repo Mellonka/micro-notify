@@ -1,10 +1,13 @@
 from typing import Self
+from datetime import datetime
 
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
 from src.domains.message.domain.message import Message
+from src.domains.message.domain.message_status import MessageStatus, Status
 from src.domains.message.domain.message_unit_of_work import CreateMessageUnitOfWork
 from src.domains.message.infra.sqlalchemy.message_repository import SQLAlchemyMessageRepository
+from src.domains.message.infra.sqlalchemy.message_status_repository import SQLAlchemyMessageStatusRepository
 from src.domains.message.infra.aio_pika.publisher import RabbitMQPublisher
 from src.domains.message.infra.sqlalchemy.metadata import session_factory
 
@@ -22,6 +25,7 @@ class SQLAlchemyMQCreateMessageUOW(CreateMessageUnitOfWork):
     async def __aenter__(self) -> Self:
         self.session: AsyncSession = self.session_fac()
         self.message_repo = SQLAlchemyMessageRepository(self.session)
+        self.status_repo = SQLAlchemyMessageStatusRepository(self.session)
         return self
     
     async def __aexit__(self, *args, **kwargs) -> None:
@@ -33,6 +37,7 @@ class SQLAlchemyMQCreateMessageUOW(CreateMessageUnitOfWork):
             return
         await self.msg_broker.publish(self.msg)
         self.msg.pending = True
+        await self.status_repo.add(MessageStatus(id=self.msg.id, status=Status.sending, updated_at=datetime.now()))
         await self.message_repo.update(self.msg)
         await self.session.commit()
     
