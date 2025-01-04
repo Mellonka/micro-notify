@@ -8,7 +8,7 @@ from src.domains.message.domain.base import AggregateRoot, Entity
 class Status(StrEnum):
     sending = "sending"
     retrying="retrying"
-    sended = "sended"
+    sent = "sent"
     failed = "failed"
 
 
