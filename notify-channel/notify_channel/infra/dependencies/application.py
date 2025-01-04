@@ -24,6 +24,7 @@ class ApplicationContainer(containers.DeclarativeContainer):
         declare_queue,
         channel=rabbitmq_cont.channel,
         name=config.email.queue.events,
+        durable=True,
     )
     email_event_queue_producer = providers.Factory(
         RabbitMQProducer,

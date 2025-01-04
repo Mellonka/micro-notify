@@ -1,18 +1,16 @@
+import asyncio
 import logging
 from dataclasses import dataclass
 from typing import AsyncIterable
 
+from notify_shared import CommandHandler
 from pydantic import ValidationError
 from aio_pika.abc import (
     AbstractRobustQueue,
     AbstractIncomingMessage,
 )
 
-from notify_channel.application.commands.send_email import (
-    SendEmailCommand,
-    SendEmailHandler,
-    AlreadySentError,
-)
+from notify_channel.application.commands.send_email import AlreadySentError
 
 
 logger = logging.getLogger("app")
@@ -21,15 +19,17 @@ logger = logging.getLogger("app")
 @dataclass
 class RabbitMQConsumer:
     queue: AbstractRobustQueue
-    handler: SendEmailHandler
+    handler: CommandHandler
 
     async def handle_message(self, message: AbstractIncomingMessage) -> None:
         try:
-            command = SendEmailCommand.model_validate_json(message.body)
+            command = self.handler.parse_command(message.body)
             await self.handler.handle(command)
         except ValidationError as exc:
             logger.exception(
-                "Не валидное сообщение: %s", message.body.decode(), exc_info=exc,
+                "Не валидное сообщение: %s",
+                message.body.decode(),
+                exc_info=exc,
             )
             await message.reject()
         except AlreadySentError:
@@ -38,9 +38,12 @@ class RabbitMQConsumer:
         except Exception as exc:
             logger.exception("Неожиданная ошибка", exc_info=exc)
             await message.nack()
+            await asyncio.sleep(5)
         else:
             logger.info("Обработали сообщение")
             await message.ack()
+        
+        breakpoint()
 
     async def iterator(self) -> AsyncIterable[AbstractIncomingMessage]:
         async with self.queue.iterator() as queue_iter:

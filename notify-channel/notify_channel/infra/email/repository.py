@@ -63,7 +63,7 @@ class SQLAlchemyEmailEvent(SQLAlchemyBase):
 
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     email_id: Mapped[UUID] = mapped_column(ForeignKey("emails.id"))
-    timestamp: Mapped[dt.datetime]
+    timestamp: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
     event: Mapped[str]
     data: Mapped[dict | None] = mapped_column(postgresql.JSONB())
 

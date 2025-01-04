@@ -51,6 +51,10 @@ class SendEmailHandler(CommandHandler[SendEmailCommand, None]):
     email_service: EmailServiceABC
     unit_of_work: UnitOfWorkABC
 
+    @classmethod
+    def parse_command(cls, data: bytes | str) -> SendEmailCommand:
+        return SendEmailCommand.model_validate_json(data)
+
     @cached_property
     def email_read_repo(self) -> EmailReadRepositoryABC:
         return self.unit_of_work.get_repository(EmailReadRepositoryABC)
